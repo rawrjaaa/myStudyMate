@@ -1,8 +1,8 @@
 import { View, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, Modal, Pressable, Image, Alert } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import * as ImagePicker from 'expo-image-picker';
 
 interface Note {
@@ -26,6 +26,13 @@ export default function NotesScreen() {
   useEffect(() => {
     loadNotes();
   }, []);
+
+  // Reload notes when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadNotes();
+    }, [])
+  );
 
   const loadNotes = async () => {
     try {
